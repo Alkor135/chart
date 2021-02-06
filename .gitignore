@@ -1,3 +1,24 @@
 /venv/
+/.idea/
 
 *.csv
+
+.ipynb_checkpoints
+__pycache__
+__pycache__/
+venv
+env
+*.log
+*.db
+.idea
+data_finam/
+.idea/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
