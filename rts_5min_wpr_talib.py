@@ -24,7 +24,7 @@ df['wpr_1'] = talib.WILLR(df['high'].values, df['low'].values, df['close'].value
 
 # добавим к DF столбец с WPR 96
 df['wpr_2'] = talib.WILLR(df['high'].values, df['low'].values, df['close'].values, timeperiod=96)
-df['line'] = -50
+df['line'] = -50  # Добавляю колонку с линией для индикаторов
 # print(df)
 
 # create two axes
@@ -41,6 +41,6 @@ fplt.volume_ocv(volumes, ax=ax.overlay())
 # WPR
 df[['wpr_1']].plot(ax=ax2, legend='WPR14', color='#008800')
 df[['wpr_2']].plot(ax=ax2, legend='WPR96', color='#EF5350')
-df[['line']].plot(ax=ax2, color='#000000')
+df[['line']].plot(ax=ax2, color='#000000')  # Построение центральной линии для индикаторов
 
 fplt.show()
