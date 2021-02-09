@@ -3,6 +3,9 @@
 import pandas as pd
 import finplot as fplt
 import talib
+import datetime
+
+fplt.display_timezone = datetime.timezone.utc
 
 symbol = 'RTS'
 # Загружаем файл с разделителем ';' в DF
