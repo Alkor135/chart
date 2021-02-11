@@ -14,7 +14,7 @@ symbol = 'RTS'
 2019-05-08 10:00:00,121430.0,121470.0,121240.0,121400.0,0,141,511
 2019-05-08 10:00:00,121400.0,121440.0,121240.0,121330.0,893,5390,501
 """
-df = pd.read_csv('c:/data_finam_quote_csv/500_delta_file.csv',
+df = pd.read_csv('c:/data_finam_quote_csv/500_delta_2021.csv',
                  names=["date_time",
                         "open",
                         "high",
