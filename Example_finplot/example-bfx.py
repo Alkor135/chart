@@ -31,9 +31,9 @@ def update():
     df = pd.DataFrame(table, columns='time open close high low volume'.split())
 
     # calculate indicator
-    tdup,tddn = td_sequential(df['close'])
-    df['tdup'] = [('%i'%i if 0<i<10 else '') for i in tdup]
-    df['tddn'] = [('%i'%i if 0<i<10 else '') for i in tddn]
+    tdup, tddn = td_sequential(df['close'])
+    df['tdup'] = [('%i'%i if 0 < i < 10 else '') for i in tdup]
+    df['tddn'] = [('%i'%i if 0 < i < 10 else '') for i in tddn]
 
     # pick columns for our three data sources: candlesticks and TD sequencial labels for up/down
     candlesticks = df['time open close high low'.split()]
@@ -46,7 +46,7 @@ def update():
         plots.append(fplt.candlestick_ochl(candlesticks))
         plots.append(fplt.volume_ocv(volumes, ax=ax.overlay()))
         plots.append(fplt.labels(td_up_labels, color='#009900'))
-        plots.append(fplt.labels(td_dn_labels, color='#990000', anchor=(0.5,0)))
+        plots.append(fplt.labels(td_dn_labels, color='#990000', anchor=(0.5, 0)))
     else:
         # every time after we just update the data sources on each plot
         plots[0].update_data(candlesticks)
@@ -58,6 +58,6 @@ def update():
 plots = []
 ax = fplt.create_plot('Realtime Bitcoin/Dollar 1m TD Sequential (BitFinex REST)', init_zoom_periods=100, maximize=False)
 update()
-fplt.timer_callback(update, 5.0) # update (using synchronous rest call) every N seconds
+fplt.timer_callback(update, 5.0)  # update (using synchronous rest call) every N seconds
 
 fplt.show()

@@ -72,8 +72,8 @@ def animate(ax, ax2, df):
 
 
 df = gen_dumb_price()
-ax,ax2 = fplt.create_plot('Things move', rows=2, init_zoom_periods=100, maximize=False)
+ax, ax2 = fplt.create_plot('Things move', rows=2, init_zoom_periods=100, maximize=False)
 df.plot(kind='candle', ax=ax)
-df[['open','close','volume']].plot(kind='volume', ax=ax2)
+df[['open', 'close', 'volume']].plot(kind='volume', ax=ax2)
 fplt.timer_callback(lambda: animate(ax, ax2, df), 1/FPS)
 fplt.show()
