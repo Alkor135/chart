@@ -25,23 +25,7 @@ df = pd.read_csv('c:/data_finam_quote_csv/500_delta_2021.csv',
                         "delta"],
                  delimiter=',')
 
-# Меняем индекс и делаем его типом datetime
-df = df.set_index(pd.to_datetime(df['date_time'], format='%Y-%m-%d %H:%M:%S'))
-# print(df)  # Проверка загруженного
+df['speed_ticks'] = 0
+df['speed_ticks'] = df['ticks'] / df['delta_time']
 
-# создаем 4 окна
-ax, ax2, ax3 = fplt.create_plot(symbol, rows=3)
-
-# рисуем свечной график в основном окне
-candles = df[['open', 'close', 'high', 'low']]
-fplt.candlestick_ochl(candles, ax=ax)
-
-# рисуем график времени дельты свечи
-delta_time = df[['open', 'close', 'delta_time']]
-fplt.volume_ocv(delta_time, ax=ax2)
-
-# рисуем график дельты
-delta = df[['open', 'close', 'delta']]
-fplt.volume_ocv(delta, ax=ax3)
-
-fplt.show()
+print(df)
