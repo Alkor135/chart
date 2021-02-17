@@ -25,7 +25,9 @@ df = pd.read_csv('c:/data_finam_quote_csv/500_delta_2021.csv',
                         "delta"],
                  delimiter=',')
 
+print(df)
+
 df['speed_ticks'] = 0
-df['speed_ticks'] = df['ticks'] / df['delta_time']
+df['speed_ticks'] = df['delta_time'] / df['ticks']
 
 print(df)
