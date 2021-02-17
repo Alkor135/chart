@@ -6,13 +6,15 @@ from datetime import datetime
 
 # ticks=[]
 def parser(parse):
-    if parse[0] == '1' and parse[1] == 'RIH1':  # записываем цену текущего тика SiM0 в список ticks
+    if parse[0] == '1' and parse[1] == 'RIH1':  # записываем цену текущего тика RIH1 в список ticks
         # ticks.append(float(parse[4]))
         print(parse)
         time = parse[8]
-        print(time[0:-2])
-        print(parse[8][0:-2])
-        proba_datetime = datetime.strptime(parse[7], "%d.%m.%Y").date()
+        print(time[0:-1])
+        print(time)
+        print(parse[8][0:-1])
+        # proba_datetime = datetime.strptime(f'{parse[7]}', "%d.%m.%Y").date()
+        proba_datetime = datetime.strptime(f'{parse[7]} {parse[8][0:-1]}', "%d.%m.%Y %H:%M:%S").date()
         print(proba_datetime)
 
 
