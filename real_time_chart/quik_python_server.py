@@ -13,8 +13,8 @@ def parser(parse):
         print(time[0:-1])
         print(time)
         print(parse[8][0:-1])
-        # proba_datetime = datetime.strptime(f'{parse[7]}', "%d.%m.%Y").date()
-        proba_datetime = datetime.strptime(f'{parse[7]} {parse[8][0:-1]}', "%d.%m.%Y %H:%M:%S").date()
+        proba_datetime = datetime.strptime(f'{parse[7]}', "%d.%m.%Y").date()
+        # proba_datetime = datetime.strptime(f'{parse[7]} {parse[8][0:-1]}', "%d.%m.%Y %H:%M:%S").date()
         print(proba_datetime)
 
 
@@ -34,3 +34,5 @@ def service():
 # Запускаем сервер в своем потоке
 t = threading.Thread(name='service', target=service)
 t.start()
+
+# print(' За потоком')
