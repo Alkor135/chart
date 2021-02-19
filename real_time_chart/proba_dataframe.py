@@ -13,6 +13,7 @@ tmp_datetime = datetime.strptime(f'{parse_lst[7]} {parse_lst[8][0:-1]}', "%d.%m.
 df = pd.DataFrame(columns='date_time open high low close delta_time_sec'.split(' '))
 # df = df.set_index(pd.to_datetime(df['date_time'], format='%d-%m-%Y %H:%M:%S.%f'))
 df.loc[len(df)] = [0, 0, 0, 0, 0, 0]
+# df.iloc[len(df)]['date_time'] = tmp_datetime
 print(df)
 print()
 
