@@ -8,13 +8,17 @@ print(parse_lst[8][0:-1])  # Выводит время(формат str) без 
 
 # Преобразование в формат datetime
 tmp_datetime = datetime.strptime(f'{parse_lst[7]} {parse_lst[8][0:-1]}', "%d.%m.%Y %H:%M:%S.%f")
+tmp_datetime_no_ms = datetime.strptime(f'{parse_lst[7]} {parse_lst[8][0:-1]}', "%d.%m.%Y %H:%M:%S.%f").replace(microsecond=0)
+
 print(datetime.strptime(f'{parse_lst[7]} {parse_lst[8][0:-1]}', "%d.%m.%Y %H:%M:%S.%f").date())  # Выводит только дату
 print(tmp_datetime.date())  # Выводит только дату
 print(datetime.strptime(f'{parse_lst[7]} {parse_lst[8][0:-1]}', "%d.%m.%Y %H:%M:%S.%f").time())  # Выводит только время
 print(tmp_datetime.time())  # Выводит только время
 print(datetime.strptime(f'{parse_lst[7]} {parse_lst[8][0:-1]}', "%d.%m.%Y %H:%M:%S.%f"))  # Выводит дату и время
 print(tmp_datetime)  # Выводит дату и время
+print(tmp_datetime_no_ms)  # Выводит дату и время без миллисекунд
 print()
+
 
 # Преобразование формата из datetime в строковый формат
 print(tmp_datetime.strftime("%d.%m.%Y %H:%M:%S.%f"))
