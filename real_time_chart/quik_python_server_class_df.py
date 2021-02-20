@@ -1,31 +1,20 @@
 # В КВИКе запускаем луа-скрипт QuikLuaPython.lua
 import socket
 import threading
-from datetime import datetime
+from datetime import datetime, timezone
 import pandas as pd
-import math
 import finplot as fplt
-import requests
-import time
+
+fplt.display_timezone = timezone.utc
 
 
 class DeltaBar():
     def __init__(self):
         self.df = pd.DataFrame(columns='date_time open high low close delta delta_time_sec'.split(' '))
-        # self.df.loc[len(self.df)] = [0, 0, 0, 0, 0, 0, 0]
-        # self.first_parse = True
+        self.df.loc[len(self.df)] = [0, 0, 0, 0, 0, 0, 0]
 
     def parser(self, parse):
-        # print(parse)
         if parse[0] == '1' and parse[1] == 'RIH1':
-            # if self.first_parse:
-            #     while len(self.df) < 100:
-            #         self.df.loc[len(self.df)] = [float(parse[4]), float(parse[4]), float(parse[4]), float(parse[4]),
-            #                                      float(parse[4]), float(parse[4]), float(parse[4])]
-            #     self.first_parse = False
-
-            if len(self.df) == 0:
-                self.df.loc[len(self.df)] = [0, 0, 0, 0, 0, 0, 0]  # Добавляем строку в DF
             if abs(self.df.iloc[len(self.df) - 1]['delta']) >= 500:
                 self.df.loc[len(self.df)] = [0, 0, 0, 0, 0, 0, 0]  # Добавляем строку в DF
 
@@ -78,7 +67,7 @@ def update():
     df = df.set_index(pd.to_datetime(df['date_time'], format='%Y-%m-%d %H:%M:%S'))
     # print(delta_bar.df)
 
-    # pick columns for our three data sources: candlesticks and TD sequencial labels for up/down
+    # pick columns for our three data sources: candlesticks and TD
     candlesticks = df['open close high low'.split()]
     volumes = df['open close delta_time_sec'.split()]
     if not plots:
@@ -92,19 +81,15 @@ def update():
         plots[1].update_data(volumes)
 
 
-delta_bar = DeltaBar()
-# Запускаем сервер в своем потоке
-t = threading.Thread(name='service', target=service)
-t.start()
+if __name__ == '__main__':
+    delta_bar = DeltaBar()
+    # Запускаем сервер в своем потоке
+    t = threading.Thread(name='service', target=service)
+    t.start()
 
-# while True:
-#     print(delta_bar.df)
-#     time.sleep(5)
-# time.sleep(15)
+    plots = []
+    ax = fplt.create_plot('RIH1', init_zoom_periods=100, maximize=False)
+    update()
+    fplt.timer_callback(update, 2.0)  # update (using synchronous rest call) every N seconds
 
-plots = []
-ax = fplt.create_plot('RIH1', init_zoom_periods=100, maximize=False)
-update()
-fplt.timer_callback(update, 2.0)  # update (using synchronous rest call) every N seconds
-
-fplt.show()
+    fplt.show()
