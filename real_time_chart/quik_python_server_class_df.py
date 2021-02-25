@@ -18,11 +18,6 @@ class DeltaBar():
             if abs(self.df.iloc[len(self.df) - 1]['delta']) >= 500:
                 self.df.loc[len(self.df)] = [0, 0, 0, 0, 0, 0, 0]  # Добавляем строку в DF
 
-            # if self.df.iloc[-1]['open'] + 100 <= parse[4] and self.df.iloc[-1]['open'] != 0:
-            #     self.df.loc[len(self.df)] = [0, self.df.iloc[-1]['open'] + 100, 0, 0, 0, 0, 0]  # Добавляем строку в DF
-            # if self.df.iloc[-1]['open'] - 100 >= parse[4]:
-            #     self.df.loc[len(self.df)] = [0, self.df.iloc[-1]['open'] - 100, 0, 0, 0, 0, 0]  # Добавляем строку в DF
-
             self.df.iloc[len(self.df) - 1]['close'] = float(parse[4])  # Записываем последнюю цену как цену close бара
 
             if self.df.iloc[len(self.df) - 1]['date_time'] == 0:
@@ -50,7 +45,7 @@ class DeltaBar():
                 self.df.iloc[len(self.df) - 1]['date_time']
             self.df.iloc[len(self.df) - 1]['delta_time_sec'] = self.df.iloc[len(self.df) - 1]['delta_time_sec'].seconds
 
-            print(self.df)
+            # print(self.df)
 
 
 def service():
