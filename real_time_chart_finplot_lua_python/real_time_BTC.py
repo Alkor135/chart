@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Реал тайм котировки
+# Реал тайм котировки по Биткоину
 import pandas as pd
 import finplot as fplt
 import requests

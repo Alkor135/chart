@@ -1,4 +1,5 @@
 # В КВИКе запускаем луа-скрипт QuikLuaPython.lua
+# Проверка того, что получаем от сервера (Quik)
 import socket
 import threading
 from datetime import datetime

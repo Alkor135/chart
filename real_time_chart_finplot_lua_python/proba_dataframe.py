@@ -1,3 +1,4 @@
+# Проба построения DataFrame
 from datetime import datetime
 import pandas as pd
 

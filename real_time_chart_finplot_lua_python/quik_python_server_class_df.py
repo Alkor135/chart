@@ -1,4 +1,5 @@
 # В КВИКе запускаем луа-скрипт QuikLuaPython.lua
+# рабочий скрипт для построения дельта графика
 import socket
 import threading
 from datetime import datetime, timezone
@@ -44,8 +45,6 @@ class DeltaBar():
                 datetime.strptime(f'{parse[7]} {parse[8][0:-1]}', "%d.%m.%Y %H:%M:%S.%f") - \
                 self.df.iloc[len(self.df) - 1]['date_time']
             self.df.iloc[len(self.df) - 1]['delta_time_sec'] = self.df.iloc[len(self.df) - 1]['delta_time_sec'].seconds
-
-            # print(self.df)
 
 
 def service():

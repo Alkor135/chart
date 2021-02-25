@@ -1,4 +1,5 @@
 # В КВИКе запускаем луа-скрипт QuikLuaPython.lua
+# скрипт с сайта jatotrader
 import socket
 import threading
 from datetime import datetime
