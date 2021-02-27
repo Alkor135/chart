@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# Из файла с дельта данными рисует график дельты, времени формирования бара и направления
 
 import pandas as pd
 import finplot as fplt

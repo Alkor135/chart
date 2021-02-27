@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+# Проба создания DF из файла
 import pandas as pd
 import finplot as fplt
 import datetime
