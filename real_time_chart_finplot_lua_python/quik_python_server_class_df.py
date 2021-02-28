@@ -9,7 +9,7 @@ import finplot as fplt
 fplt.display_timezone = timezone.utc
 
 
-class DeltaBar():
+class DeltaBar:
     def __init__(self):
         self.df = pd.DataFrame(columns='date_time open high low close delta delta_time_sec'.split(' '))
         self.df.loc[len(self.df)] = [0, 0, 0, 0, 0, 0, 0]
