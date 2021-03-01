@@ -1,6 +1,6 @@
 # В КВИКе запускаем луа-скрипт QuikLuaPython.lua
 # Скрипт для построения дельта графика с отображением кластера с макс объемом
-# Не доделан
+
 import socket
 import threading
 from datetime import datetime, timezone
@@ -72,7 +72,7 @@ class DeltaBar:
 
 def service():
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.bind(('127.0.0.1', 3587))  # Хост-этот компьютер, порт - 3587
+    sock.bind(('127.0.0.1', 3595))  # Хост-этот компьютер, порт - 3595
     while True:
         res = sock.recv(2048).decode('utf-8')
         if res == '<qstp>\n':  # строка приходит от клиента при остановке луа-скрипта в КВИКе
@@ -83,6 +83,7 @@ def service():
 
 
 def update():
+    # if delta_bar.df[-1]['open'] != 0:
     df = delta_bar.df
     # Меняем индекс и делаем его типом datetime
     df = df.set_index(pd.to_datetime(df['date_time'], format='%Y-%m-%d %H:%M:%S'))
@@ -115,6 +116,9 @@ if __name__ == '__main__':
     t = threading.Thread(name='service', target=service)
     t.start()
 
+    # print(f'{delta_bar.df[-1]["open"]=}')
+
+    # if delta_bar.df[-1]['open'] != 0:
     plots = []
     ax, ax2, ax3 = fplt.create_plot('RIH1', init_zoom_periods=100, maximize=False, rows=3)
     update()
