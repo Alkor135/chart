@@ -15,8 +15,11 @@ class DeltaBar:
         # Создаем df под дельта бары
         self.df = pd.DataFrame(columns='date_time open high low close delta delta_time_sec max_vol_cluster'.split(' '))
         # self.df.loc[len(self.df)] = [datetime.now().replace(microsecond=0), 0, 0, 0, 0, 0, 0, 0]
-        self.df.loc[len(self.df)] = [0, 0, 0, 0, 0, 0, 0, 0]  # Создаем в df строку с 0
+        tmp_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.df.loc[len(self.df)] = [tmp_datetime, 0, 0, 0, 0, 0, 0, 0]  # Создаем в df строку с 0
+        # self.df.loc[len(self.df)] = [0, 0, 0, 0, 0, 0, 0, 0]  # Создаем в df строку с 0
         self.df_ticks = pd.DataFrame(columns='last vol'.split(' '))
+        print(self.df)
 
     def max_cluster_calculate(self, price, volume):
         self.df_ticks.loc[len(self.df_ticks)] = [0, 0]  # Добавляем строку
@@ -41,7 +44,8 @@ class DeltaBar:
 
         self.df.iloc[-1]['close'] = float(parse[4])  # Записываем последнюю цену как цену close бара
 
-        if self.df.iloc[-1]['date_time'] == 0:  # Если последняя строка имеет нули (начался новый бар)
+        # if self.df.iloc[-1]['date_time'] == 0:  # Если последняя строка имеет нули (начался новый бар)
+        if self.df.iloc[-1]['open'] == 0:  # Если последняя строка имеет нули (начался новый бар)
             # Время последней сделки записываем как время открытия бара
             self.df.iloc[-1]['date_time'] = datetime.strptime(f'{parse[7]} {parse[8][0:-1]}',
                                                               "%d.%m.%Y %H:%M:%S.%f").replace(microsecond=0)
@@ -123,7 +127,7 @@ def update():
 
 
 if __name__ == '__main__':
-    # Настройки для отображения широкого df
+    # Настройки для отображения широкого df pandas
     pd.options.display.width = 1200
     pd.options.display.max_colwidth = 100
     pd.options.display.max_columns = 100
@@ -134,6 +138,7 @@ if __name__ == '__main__':
     t = threading.Thread(name='service', target=service)
     t.start()
 
+    # Запускаем парсер в своем потоке
     t_parser = threading.Thread(name='parser', target=parser)
     t_parser.start()
 
