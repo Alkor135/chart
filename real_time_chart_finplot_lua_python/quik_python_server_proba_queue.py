@@ -15,9 +15,9 @@ class DeltaBar:
         # Создаем df под дельта бары
         self.df = pd.DataFrame(columns='date_time open high low close delta delta_time_sec max_vol_cluster'.split(' '))
         # self.df.loc[len(self.df)] = [datetime.now().replace(microsecond=0), 0, 0, 0, 0, 0, 0, 0]
-        tmp_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.df.loc[len(self.df)] = [tmp_datetime, 0, 0, 0, 0, 0, 0, 0]  # Создаем в df строку с 0
-        # self.df.loc[len(self.df)] = [0, 0, 0, 0, 0, 0, 0, 0]  # Создаем в df строку с 0
+        # tmp_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        # self.df.loc[len(self.df)] = [tmp_datetime, 0, 0, 0, 0, 0, 0, 0]  # Создаем в df строку с 0
+        self.df.loc[len(self.df)] = [0, 0, 0, 0, 0, 0, 0, 0]  # Создаем в df строку с 0
         self.df_ticks = pd.DataFrame(columns='last vol'.split(' '))
         print(self.df)
 
