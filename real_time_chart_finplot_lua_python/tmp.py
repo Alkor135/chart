@@ -15,10 +15,6 @@ class DeltaBars:
         # Создаем df под дельта бары
         self.df = pd.DataFrame(columns='date_time open high low close delta delta_time_sec max_vol_cluster'.split(' '))
         self.df.loc[len(self.df)] = [datetime.now().replace(microsecond=0), 0, 0, 0, 0, 0, 0, 0]
-        # self.df.loc[len(self.df)] = [time.time(), 0, 0, 0, 0, 0, 0, 0]
-        # tmp_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        # self.df.loc[len(self.df)] = [tmp_datetime, 0, 0, 0, 0, 0, 0, 0]  # Создаем в df строку с 0
-        # self.df.loc[len(self.df)] = [0, 0, 0, 0, 0, 0, 0, 0]  # Создаем в df строку с 0
         self.df_ticks = pd.DataFrame(columns='last vol'.split(' '))
         print(self.df)
 
@@ -34,9 +30,6 @@ class DeltaBars:
         return max_idx
 
     def run(self, parse):
-        # if len(self.df) == 0:
-        #     self.df.loc[len(self.df)] = [0, 0, 0, 0, 0, 0, 0, 0]
-
         # Если бар сформирован по дельте
         if abs(self.df.loc[len(self.df)-1, 'delta']) >= 500:
             # Если время открытия дельта бара отлично от времени последней сделки
@@ -68,9 +61,6 @@ class DeltaBars:
             self.df.loc[len(self.df)-1, 'delta'] -= float(parse[6])  # Уменьшаем дельту бара на объем посл. сделки
 
         # Подсчитываем количество секунд прошедшее от начала бара до последней сделки
-        # self.df.iloc[-1]['delta_time_sec'] = \
-        #     datetime.strptime(f'{parse[7]} {parse[8][0:-1]}', "%d.%m.%Y %H:%M:%S.%f") - \
-        #     self.df.iloc[-1]['date_time']
         self.df.loc[len(self.df)-1, 'delta_time_sec'] = \
             datetime.strptime(f'{parse[7]} {parse[8][0:-1]}', "%d.%m.%Y %H:%M:%S.%f") - \
             self.df.loc[len(self.df)-1, 'date_time']
@@ -114,16 +104,15 @@ def update():
     candlesticks = df['open close high low'.split()]
     deltabarsec = df['open close delta_time_sec'.split()]
     delta = df['open close delta'.split()]
-    # delta = df['delta']
     maxvolcluster = df['max_vol_cluster']
     if not plots:
         # first time we create the plots
         global ax
         plots.append(fplt.candlestick_ochl(candlesticks, candle_width=0.8))
         plots.append(fplt.volume_ocv(deltabarsec, ax=ax2))
+        fplt.add_legend('Время формирования бара', ax=ax2)
         plots.append(fplt.volume_ocv(delta, colorfunc=fplt.strength_colorfilter, ax=ax3))
-        # plots.append(fplt.hist(delta, bins=60, ax=ax3))
-        # plots.append(fplt.plot(delta, legend='Daily returns %', ax=ax3))
+        fplt.add_legend('Дельта', ax=ax3)
         plots.append(fplt.plot(maxvolcluster, legend='Max volume', style='o', color='#00f'))
     else:
         # every time after we just update the data sources on each plot
@@ -140,7 +129,7 @@ if __name__ == '__main__':
     pd.options.display.max_columns = 100
 
     delta_bars = DeltaBars()  # Создаем экземпляр класса DeltaBar
-    q = Queue()
+    q = Queue()  # Создаем очередь
     # Запускаем сервер в своем потоке
     t = threading.Thread(name='service', target=service)
     t.start()
