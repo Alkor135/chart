@@ -35,5 +35,3 @@ def service():
 # Запускаем сервер в своем потоке
 t = threading.Thread(name='service', target=service)
 t.start()
-
-# print(' За потоком')

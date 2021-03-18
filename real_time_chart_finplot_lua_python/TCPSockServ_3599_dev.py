@@ -132,12 +132,12 @@ def play_sound(df_end2):
     # print(df_end2)
     # print(len(df_end2))
     # print(df_end2.iloc[0]['sec'])
-    if len(df_end2) == 2:  # Размер DF 2 или больше строк
+    if len(df_end2) == 2:  # Размер DF 2 строки
         if int(df_end2.iloc[0]['sec']) < int(df_end2.iloc[1]['sec']):  # Время формирования последнего бара больше чем предыдущего
             if (df_end2.iloc[0]['delta'] < 0) and (df_end2.iloc[1]['delta'] > 0):
-                winsound.PlaySound('bite.wav', winsound.SND_FILENAME)
+                winsound.PlaySound('c:/Jatotrader/sounds/bite.wav', winsound.SND_FILENAME)
             elif (df_end2.iloc[0]['delta'] > 0) and (df_end2.iloc[1]['delta'] < 0):
-                winsound.PlaySound('bite.wav', winsound.SND_FILENAME)
+                winsound.PlaySound('c:/Jatotrader/sounds/bite.wav', winsound.SND_FILENAME)
 
 
 def update():
