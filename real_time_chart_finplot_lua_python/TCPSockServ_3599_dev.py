@@ -128,16 +128,27 @@ def service():
     s.close()
 
 
+def play_sound(df_end2):
+    # print(df_end2)
+    # print(len(df_end2))
+    # print(df_end2.iloc[0]['sec'])
+    if len(df_end2) == 2:  # Размер DF 2 или больше строк
+        if int(df_end2.iloc[0]['sec']) < int(df_end2.iloc[1]['sec']):  # Время формирования последнего бара больше чем предыдущего
+            if (df_end2.iloc[0]['delta'] < 0) and (df_end2.iloc[1]['delta'] > 0):
+                winsound.PlaySound('bite.wav', winsound.SND_FILENAME)
+            elif (df_end2.iloc[0]['delta'] > 0) and (df_end2.iloc[1]['delta'] < 0):
+                winsound.PlaySound('bite.wav', winsound.SND_FILENAME)
+
+
 def update():
     df = delta_bars.df
     # Меняем индекс и делаем его типом datetime
     df = df.set_index(pd.to_datetime(df['date_time'], format='%Y-%m-%d %H:%M:%S'))
     df = df.drop('date_time', 1)  # Удаляем колонку с датой и временем, т.к. дата у нас теперь в индексе
 
-    winsound.PlaySound('bite.wav', winsound.SND_FILENAME)
+    play_sound(df.tail(2))  # Вызов функции звукового сигнала
 
-    # print(df)
-
+    print(df)
 
     # pick columns for our three data sources: candlesticks and TD
     candlesticks = df['open close high low'.split()]
@@ -163,7 +174,7 @@ def update():
 
 if __name__ == '__main__':
     # Изменяемые настройки
-    ticker = 'RIH1'
+    ticker = 'RIM1'
     delta_val = 500
 
     client = None
