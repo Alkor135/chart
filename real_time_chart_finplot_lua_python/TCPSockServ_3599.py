@@ -3,16 +3,17 @@
 # Сервер останавливается, когда клиент закрывает соединение
 import socket
 import threading
-import pandas as pd
-from multiprocessing import Queue
 from datetime import datetime, timezone
+from multiprocessing import Queue
 import finplot as fplt
+import pandas as pd
+import winsound
 
 
 class DeltaBars:
     def __init__(self):
         # Создаем df под дельта бары
-        self.df = pd.DataFrame(columns='date_time open high low close delta delta_time_sec max_vol_cluster'.split(' '))
+        self.df = pd.DataFrame(columns='date_time open high low close delta sec max_vol'.split(' '))
         self.df.loc[len(self.df)] = [datetime.now().replace(microsecond=0), 0, 0, 0, 0, 0, 0, 0]
         self.df_ticks = pd.DataFrame(columns='last vol'.split(' '))
         print(self.df)
@@ -60,16 +61,20 @@ class DeltaBars:
             self.df.loc[len(self.df)-1, 'delta'] -= float(parse[6])  # Уменьшаем дельту бара на объем посл. сделки
 
         # Подсчитываем количество секунд прошедшее от начала бара до последней сделки
-        self.df.loc[len(self.df)-1, 'delta_time_sec'] = \
-            datetime.strptime(f'{parse[7]} {parse[8]}', "%d.%m.%Y %H:%M:%S.%f") - \
-            self.df.loc[len(self.df)-1, 'date_time']
+        # только в заданный временной период для исключения отрисовки индикатором больших значений
+        if 8 < datetime.time(self.df.loc[len(self.df) - 1, 'date_time']).hour < 22:
 
-        # Записываем количество секунд формирования бара (отсекаем микросекунды)
-        self.df.loc[len(self.df)-1, 'delta_time_sec'] = self.df.loc[len(self.df)-1, 'delta_time_sec'].seconds
+            self.df.loc[len(self.df)-1, 'sec'] = \
+                datetime.strptime(f'{parse[7]} {parse[8]}', "%d.%m.%Y %H:%M:%S.%f") - \
+                self.df.loc[len(self.df)-1, 'date_time']
 
-        # Записываем цену кластера с максимальным объемом
-        self.df.loc[len(self.df)-1, 'max_vol_cluster'] = self.max_cluster_calculate(float(parse[4]), float(parse[6]))
-        print(self.df)
+            # Записываем количество секунд формирования бара (отсекаем микросекунды)
+            self.df.loc[len(self.df)-1, 'sec'] = self.df.loc[len(self.df)-1, 'sec'].seconds
+
+            # Записываем цену кластера с максимальным объемом
+            self.df.loc[len(self.df)-1, 'max_vol'] = self.max_cluster_calculate(float(parse[4]), float(parse[6]))
+
+        # print(self.df)
 
 
 def parser():
@@ -123,18 +128,33 @@ def service():
     s.close()
 
 
+def play_sound(df_end2):
+    # print(df_end2)
+    # print(len(df_end2))
+    # print(df_end2.iloc[0]['sec'])
+    if len(df_end2) == 2:  # Размер DF 2 строки
+        if int(df_end2.iloc[0]['sec']) < int(df_end2.iloc[1]['sec']):  # Время формирования последнего бара больше чем предыдущего
+            if (df_end2.iloc[0]['delta'] < 0) and (df_end2.iloc[1]['delta'] > 0):
+                winsound.PlaySound('c:/Jatotrader/sounds/bite.wav', winsound.SND_FILENAME)
+            elif (df_end2.iloc[0]['delta'] > 0) and (df_end2.iloc[1]['delta'] < 0):
+                winsound.PlaySound('c:/Jatotrader/sounds/bite.wav', winsound.SND_FILENAME)
+
+
 def update():
     df = delta_bars.df
     # Меняем индекс и делаем его типом datetime
     df = df.set_index(pd.to_datetime(df['date_time'], format='%Y-%m-%d %H:%M:%S'))
     df = df.drop('date_time', 1)  # Удаляем колонку с датой и временем, т.к. дата у нас теперь в индексе
-    # print(df)
+
+    play_sound(df.tail(2))  # Вызов функции звукового сигнала
+
+    print(df)
 
     # pick columns for our three data sources: candlesticks and TD
     candlesticks = df['open close high low'.split()]
-    deltabarsec = df['open close delta_time_sec'.split()]
+    deltabarsec = df['open close sec'.split()]
     delta = df['open close delta'.split()]
-    maxvolcluster = df['max_vol_cluster']
+    maxvolcluster = df['max_vol']
     if not plots:
         # first time we create the plots
         global ax
@@ -154,7 +174,7 @@ def update():
 
 if __name__ == '__main__':
     # Изменяемые настройки
-    ticker = 'RIH1'
+    ticker = 'RIM1'
     delta_val = 500
 
     client = None
