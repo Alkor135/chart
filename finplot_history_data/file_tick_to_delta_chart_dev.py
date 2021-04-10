@@ -33,7 +33,7 @@ class DeltaBars:
     def delta_bar_df_calculate(self):
         pass
 
-    def charting(self):
+    def run(self):
         self.index_date_time()
         print(self.df_ticks)
 
@@ -43,4 +43,4 @@ if __name__ == '__main__':
     delta_period = 500
 
     delta_bar = DeltaBars(file_tick, delta_period)
-    delta_bar.charting()
+    delta_bar.run()
