@@ -36,6 +36,12 @@ class DeltaBars:
     def run(self):
         self.index_date_time()
         print(self.df_ticks)
+        current_idx = 10000
+        df_tmp = self.df_ticks[current_idx:]
+        print(df_tmp)
+        np_last = self.df_ticks[['<LAST>']].values
+        print(np_last)
+        print(np_last[2])
 
 
 if __name__ == '__main__':
